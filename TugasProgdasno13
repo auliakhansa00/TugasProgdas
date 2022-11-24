@@ -1,0 +1,250 @@
+#include<iostream>
+
+using namespace std;
+class BankAccount
+{
+public:
+       int accountNumber;
+       double balance;
+       
+public:
+       BankAccount(int ano,double bal)
+       {
+              accountNumber=ano;
+              balance=bal;
+       }
+       BankAccount()
+       {
+
+       }
+
+public:
+       double getBalance()
+       {
+              return(balance);
+       }
+       int getAccountNumber()
+       {
+              return(accountNumber);
+       }
+       void setBalance(double amount)
+       {
+              balance=amount;
+       }
+       void setAccountNumber(int ano)
+       {
+              accountNumber=ano;
+       }
+       void virtual showAccountInfo()
+       {
+              cout<<"Account Number : "<<accountNumber<<endl;
+              cout<<"Account Balance: "<<balance<<endl;
+       }
+       double virtual depositAmount(double damount)
+       {
+              balance=balance+damount;
+              return(balance);
+       }
+       double virtual withDrawAmount(double wamount)
+       {
+              balance=balance-wamount;
+              return(balance);
+       }
+};
+
+class CheckingAccount : BankAccount
+{
+       double interest;
+       double minBal;
+       double serviceCharge;
+public:
+       CheckingAccount(int _ano,double _amount,double _interest):BankAccount(_ano,_amount)
+       {
+              interest=_interest;
+              minBal=500;//By default
+       }
+       void setInterestRate(double irate)
+       {
+              interest=irate;
+       }
+       double retrieveInterestRate()
+       {
+              return(interest);
+       }
+       void setMinBal(double mbal)
+       {
+              minBal=mbal;
+       }
+       double retrieveMinBal()
+       {
+              return(minBal);
+       }
+       void setServiceCharge(double scharge)
+       {
+              serviceCharge=scharge;
+       }
+       double retrieveServiceCharge()
+       {
+              return(serviceCharge);
+       }
+       double  depositAmount(double damount)
+       {
+              balance=balance+damount;
+              return(balance);
+       }
+       double  withDrawAmount(double wamount)
+       {
+              if(check())
+                     balance=balance-wamount;
+              else
+                     cout<<"you have in sufficient balance"<<endl;
+              return(balance);
+       }
+       bool check()
+       {
+              if(balance<minBal)
+                     return(false);
+              else
+                     return(true);
+       }
+       void showAccountInfo()
+       {
+              cout<<"Account Number : "<<accountNumber<<endl;
+              cout<<"Account Balance: "<<balance<<endl;
+       }
+};
+
+class SavingAccount:BankAccount
+{
+       double minBal;
+public:
+       SavingAccount(int _ano,double _amount):BankAccount(_ano,_amount)
+       {
+              minBal=500;
+       }
+       double  depositAmount(double damount)
+       {
+              balance=balance+damount;
+              return(balance);
+       }
+       double  withDrawAmount(double wamount)
+       {
+              if(check())
+                     balance=balance-wamount;
+              else
+                     cout<<"you have in sufficient balance"<<endl;
+              return(balance);
+       }
+       void setMinBal(double mbal)
+       {
+              minBal=mbal;
+       }
+       bool check()
+       {
+              if(balance<minBal)
+                     return(false);
+              else
+                     return(true);
+       }
+       void showAccountInfo()
+       {
+              cout<<"Account Number : "<<accountNumber<<endl;
+              cout<<"Account Balance: "<<balance<<endl;
+       }
+};
+
+int main()
+{
+       double amount;
+       int choice;
+       do 
+       {
+
+       cout<<"Create an Account"<<endl;
+       cout<<"1 Checking Account"<<endl;
+       cout<<"2 Saving Account"<<endl;
+       cout<<"3 Exit"<<endl;
+       cin>>choice;
+       if(choice==1)
+       {
+       cout<<"Enter account number: ";
+                     int ano;
+                     cin>>ano;
+                     cout<<endl<<"Enter opening balance: ";
+                     double obal;
+                     cin>>obal;
+                     double irate;
+                     cout<<endl<<"Enter interest rate: ";
+                     cin>>irate;
+                     CheckingAccount obj(ano,obal,irate);
+                     int ch;
+                     do
+                     {
+                           cout<<"1 Deposit"<<endl<<"2 WithDraw"<<endl<<"3 Account Info"<<"4 Exit"<<endl;
+                           cin>>ch;
+                           switch(ch)
+                           {
+                           case 1:
+                                  cout<<"Enter amount: ";
+                                  cin>>amount;
+                                  double damount;
+                                  damount=obj.depositAmount(amount);
+                                  cout<<"Available balance: "<<damount<<endl;
+                                  break;
+                           case 2:
+                                  cout<<"Enter amount: ";
+                                  cin>>amount;
+                                  double wamount;
+                                         wamount=obj.withDrawAmount(amount);
+                                  cout<<"Available balance: "<<wamount<<endl;
+                                  break;
+                           case 3:
+                                  obj.showAccountInfo();
+                                  break;
+                           }
+                     }while(ch!=4);
+       }
+       else if(choice==2)
+       {
+                     cout<<"Enter account number:";
+                     int _ano;
+                     cin>>_ano;
+                     cout<<endl<<"Enter opening balance: ";
+                     double _obal;
+                     cin>>_obal;
+                     double _irate;
+                     cout<<endl<<"Enter interest rate: ";
+                     cin>>_irate;
+                     SavingAccount sObj(_ano,_obal);
+                     int _ch;
+                     do
+                     {
+                           cout<<"1 Deposit"<<endl<<"2 WithDraw"<<endl<<"3 Account Info"<<"4 Exit"<<endl;                          
+                           cin>>_ch;
+                           switch(_ch)
+                           {
+                           case 1:
+                                  cout<<"Enter amount : ";
+                                  cin>>amount;
+                                  double _damount;
+                                          _damount=sObj.depositAmount(amount);
+                                  cout<<"Available balance: "<<_damount;
+                                  break;
+                           case 2:
+                                  cout<<"Enter amount: ";
+                                  cin>>amount;
+                                  double _wamount;
+                                  _wamount=sObj.withDrawAmount(amount);
+                                  cout<<"Available balance: "<<_wamount;
+                                  break;
+                           case 3:
+                                  sObj.showAccountInfo();
+                                  break;
+                           case 4:break;
+                           default:cout<<" invalid choice ";break;
+                           }
+                     }while(_ch!=4);
+       }
+       
+       }while(choice!=3);
+}
